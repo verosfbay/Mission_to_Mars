@@ -144,17 +144,28 @@ browser.visit(url)
 hemisphere_image_urls = []
 
 # 3. Write code to retrieve the image urls and titles for each hemisphere.
-for i in range(4):
-    #create empty dictionary
-    hemispheres = {}
-    browser.find_by_css('a.product-item h3')[i].click()
-    element = browser.links.find_by_text('Sample').first
-    img_url = element['href']
-    title = browser.find_by_css("h2.title").text
-    hemispheres["img_url"] = img_url
-    hemispheres["title"] = title
-    hemisphere_image_urls.append(hemispheres)
-    browser.back()
+for z in items:
+    #empty dictionary to hold scrape
+    hemisphere = {}
+    # find the titles
+    titles = z.find('h3').text
+    link_ref = z.find('a', class_='itemLink product-item')['href']
+    
+    # concat to get the full link
+    browser.visit(url + link_ref)
+    
+    image_html = browser.html
+    image_soup = soup(image_html, 'html.parser')
+    download = image_soup.find('div', class_='downloads')
+    image_url = download.find('a')['href']
+    
+    print(titles)
+    print(img_url)
+    
+    # add titles and image url to list using append
+    hemisphere['img_url'] = img_url
+    hemisphere['title'] = titles
+    hemisphere_image_urls.append(hemisphere)
 
 
 # In[38]:
