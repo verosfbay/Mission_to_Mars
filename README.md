@@ -2,8 +2,8 @@
 Scraping websites and creating pages 
 
 ## Tools Used 
-Python
-Jupyter Notebook
-MongoDB
-Flask
-Bootstrap 3
+* Python
+* Jupyter Notebook
+* MongoDB
+* Flask
+* Bootstrap 3
