@@ -7,6 +7,9 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 # Connect to MongoDB
 def scrape_all():
+    # adding new dictionary for deliverable 2
+    data = {}
+
     # Initiate headless driver for deployment
     executable_path = {'executable_path': ChromeDriverManager().install()}
     browser = Browser('chrome', **executable_path, headless=True)
@@ -19,6 +22,7 @@ def scrape_all():
       "news_paragraph": news_paragraph,
       "featured_image": featured_image(browser),
       "facts": mars_facts(),
+      "hemispheres": hemispheres(browser),
       "last_modified": dt.datetime.now()
     }
 
@@ -28,7 +32,7 @@ def scrape_all():
 
 # Visit the mars nasa news site
 def mars_news(browser):
-    url = 'https://redplanetscience.com'
+    url = 'https://data-class-mars.s3.amazonaws.com/Mars/index.html'
     browser.visit(url)
 
     # Optional delay for loading the page
@@ -58,7 +62,7 @@ def mars_news(browser):
 
 # Visit URL
 def featured_image(browser):
-    url = 'https://spaceimages-mars.com'
+    url = 'https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/index.html'
     browser.visit(url)
 
     # Find and click the full image button
@@ -78,7 +82,7 @@ def featured_image(browser):
         return None
 
     # Use the base URL to create an absolute URL
-    img_url = f'https://spaceimages-mars.com/{img_url_rel}'
+    img_url = f'https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/{img_url_rel}'
 
     return img_url
 
@@ -86,7 +90,7 @@ def mars_facts():
 
    try:
         # use 'read_html" to scrape the facts table into a dataframe
-        df = pd.read_html('https://galaxyfacts-mars.com')[0]
+        df = pd.read_html('https://data-class-mars-facts.s3.amazonaws.com/Mars_Facts/index.html')[0]
 
    except BaseException:
         return None
@@ -97,6 +101,44 @@ def mars_facts():
 
     # Convert dataframe into HTML format, add bootstrap
    return df.to_html()
+
+def hemispheres(browser):
+    
+    # Visit URL
+    url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
+    browser.visit(url)
+
+    # Parse the resulting html with soup
+    hemi_html = browser.html
+    hemi_soup = soup(hemi_html, 'html.parser')
+
+    # Retrieve all items for hemispheres information
+    items = hemi_soup.find_all('div', class_='item')
+
+    # 2. Create a list to hold the images and titles.
+    hemisphere_image_urls = []
+
+    # 3. Write code to retrieve the image urls and titles for each hemisphere.
+
+    main_url = "https://astrogeology.usgs.gov/"
+
+    # Create loop to scrape through all hemisphere information
+    for i in range(4):
+    #create empty dictionary
+        hemispheres = {}
+        browser.find_by_css('a.product-item h3')[i].click()
+        element = browser.links.find_by_text('Sample').first
+        img_url = element['href']
+        title = browser.find_by_css("h2.title").text
+        
+        # add to dictionary using append
+        hemispheres['img_url'] = img_url
+        hemispheres['title'] = title
+        hemisphere_image_urls.append(hemispheres)
+        browser.back()
+        
+    # 4. Print the list that holds the dictionary of each image url and title.
+    return hemisphere_image_urls
 
 if __name__ == "__main__":
 
