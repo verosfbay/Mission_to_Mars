@@ -136,6 +136,11 @@ url = 'https://marshemispheres.com/'
 
 browser.visit(url)
 
+html = browser.html
+hem_soup = soup(html, 'html.parser')
+# collect all class = items
+items = hem_soup.find_all('div', class_='item')
+
 
 # In[37]:
 
