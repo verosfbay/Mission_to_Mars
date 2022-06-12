@@ -97,7 +97,7 @@ def mars_facts():
 
 def hemispheres(browser):
     # Visit URL
-    url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
+    url = 'https://marshemispheres.com/'
     browser.visit(url)
     # Parse the resulting html with soup
     hemisphere_html = browser.html
@@ -112,23 +112,26 @@ def hemispheres(browser):
     main_url = "https://astrogeology.usgs.gov/"
 
     # Create loop to scrape through all hemisphere information
-    for i in range(4):
-    #create empty dictionary
-        hemisphere = {}
-        titles = i.find('h3').text
-        # Link for full image
-        link_reference = i.find('a', class_='itemLink product-item')['href']
-        # Use the base URL to create an absolute URL and browser visit
-        browser.visit(url_main + link_reference)
-        # Parse Data
-        image_html = browser.html
-        image_soup = soup(image_html, 'html.parser')
-        download = image_soup.find('div', class_= 'downloads')
-        img_url = download.find('a')['href']
-        # append list
-        hemisphere['img_url'] = img_url
-        hemisphere['title'] = titles
-        hemisphere_image_urls.append(hemisphere)
+    for item in range(4):
+        # Create the hemisphere dictionary
+        hemispheres = {}
+        
+        # Find the hemisphere pages and click
+        browser.find_by_css('h3')[item].click()
+        
+        # Find the image link by 'Sample'
+        sphere = browser.links.find_by_text('Sample')
+        img_url = sphere['href'] 
+        
+        # Find the titles
+        title = browser.find_by_css('h2.title').text
+        hemispheres['img_url'] = img_url
+        hemispheres['title'] = title
+        
+        # Append the hemisphere data list
+        hemisphere_image_urls.append(hemispheres)
+        
+        # Go back, do it again
         browser.back()
     return hemisphere_image_urls
 

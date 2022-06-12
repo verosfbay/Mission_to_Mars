@@ -12,11 +12,11 @@
   </head>
   
   <!-- Changed background color of main body -->
-  <body style="background-color:white; color:black">
+  <body style="background-color:whitesmoke; color:black">
     <div class="container">
       <!-- Add Jumbotron to Header - CHANGED background and text color-->
       <div class="jumbotron text-center">
-        <h1 style="color:white"><b>Mission to Mars</b></h1>
+        <h1 style="color:rgb(69, 58, 21)"><b>Mission to Mars</b></h1>
         <!-- Button pointing to the scraping script -->
         <p><a class="btn btn-info btn-lg" href="/scrape" role="button">Refresh With New Data</a></p>
       </div>
@@ -25,10 +25,10 @@
       <div class="row" id="mars-news">
         <div class="col-md-12">
           <div class="media">
-            <div class="media-body" style="background-color:blueviolet">
-              <h2 style="color:whitesmoke">Latest Mars News</h2>
-              <h4 class="media-heading">{{ mars.news_title }}</h4>
-              <p>{{ mars.news_paragraph }}</p>
+            <div class="media-body" style="background-color:rgb(229, 203, 207)">
+              <h2 style="color:rgb(47, 41, 41)">Latest Mars News</h2>
+              <h4 class="media-heading">{{mars.news_title}}</h4>
+              <p>{{mars.news_paragraph}}</p>
             </div>
           </div>
         </div>
@@ -40,11 +40,7 @@
           <h2>Featured Mars Image</h2>
 
           <!-- if images is False/None/non-existent, then default to error message -->
-          <img
-            src="{{mars.featured_image | default('static/images/error.png', true) }}"
-            class="img-responsive"
-            alt="Responsive image"
-          />
+          <img src="{{mars.featured_image}}" class="img-responsive" alt="Responsive image"/>
         </div>
 
         <div class="col-md-4">
@@ -58,24 +54,23 @@
 
          <!--Section for Mars Hemisphere Images -->
          <div class="row" id="mars-hemisphere">
-          <div class="col-md-12">
-              <h2><b><center>Mars Hemispheres</center></b></h2>
+          <div class="page-header">
+            <h2 class="text-center" style="background-color:rgb(229, 203, 207)"><b>Mars Hemispheres</b></h2>
+          </div>
+
               {% for hemisphere in mars.hemispheres %}
-                  <div class="col-md-3">
+                  <div class="col-md-6">
                       <div class = "thumbnail">
-                          <img src="{{hemisphere.img_url}}"
-                            <h2><b>{{hemisphere.title}}</b></h2>
+                        <a href="{{hemisphere.img_url}}" target="_blank">
+                        <img src="{{hemisphere.img_url}}"></a>
+                        <div class="caption">
+                            <h3>{{hemisphere.title}}</h3>
+                        </div>
                       </div>
                   </div>
+
               {% endfor %}
           </div>
       </div>
-    </div>
-    <!-- Bootstrap JavaScript -->
-    <!-- jQuery, Popper.js & Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
   </body>
 </html>
